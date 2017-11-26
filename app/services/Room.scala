@@ -6,4 +6,6 @@ package services
   */
 class Room(id: String) {
   // TODO: fill class
+
+  var users = List[String]()
 }

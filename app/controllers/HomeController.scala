@@ -27,7 +27,7 @@ class HomeController @Inject() extends Controller {
     */
   def enterRoom(room: String) = Action {
     if (rooms.contains(room)) {
-      Ok(views.html.room(room))
+      Ok(views.html.room(room, room))
     } else {
       Ok(views.html.noroom("No such room"))
     }
@@ -44,11 +44,23 @@ class HomeController @Inject() extends Controller {
       .toList.mkString
 
     // add new room to rooms
-    rooms = rooms + (id -> new Room(id))
+    rooms += (id -> new Room(id))
     println("Current rooms: " + rooms.keySet)
 
     // respond to client
     Ok(id)
+  }
+
+  def newUser = Action(parse.json) { req =>
+    // extract data from request
+    val user = req.body.\\("user").head.toString.replaceAll("\"", "")
+    val room = req.body.\\("room").head.toString.replaceAll("\"", "")
+
+    // add user to room's users
+    rooms(room).users = rooms(room).users :+ user
+    println(room + " members: " + rooms(room).users)
+
+    Ok
   }
 
 }

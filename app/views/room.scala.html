@@ -1,4 +1,4 @@
-@(title: String)
+@(title: String, room: String)
 
 @main(title) {
 
@@ -10,5 +10,13 @@
   <hr>
 
   <div id="content"></div>
-
+  <script>
+    var user = prompt("Username:");
+    $.ajax({
+      url: "/newuser",
+      data: JSON.stringify({ room: "@room", user: user }),
+      method: "post",
+      contentType: "application/json"
+    })
+  </script>
 }

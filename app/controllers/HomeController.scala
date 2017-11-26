@@ -4,6 +4,7 @@ import javax.inject._
 
 import play.api._
 import play.api.mvc._
+import services.Room
 
 
 /**
@@ -28,7 +29,7 @@ class HomeController @Inject() extends Controller {
     if (rooms.contains(room)) {
       Ok(views.html.room(room))
     } else {
-      Ok(views.html.room("No such room"))
+      Ok(views.html.noroom("No such room"))
     }
   }
 
@@ -50,12 +51,4 @@ class HomeController @Inject() extends Controller {
     Ok(id)
   }
 
-}
-
-/**
-  * Class representing a room that a set of users will play games within
-  * @param id - room identifier
-  */
-class Room(id: String) {
-  // TODO: fill class
 }

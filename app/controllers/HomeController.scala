@@ -45,6 +45,8 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
   def userFeed(room: String) = Action { req =>
     println("Someone joined room " + room)
 
+    println(rooms(room).users.mkString(", "))
+
     // get users already in room
     val existingUsers = rooms(room).users
       .map { x =>
@@ -55,6 +57,8 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     def accumulate(res: Enumerator[JsValue], x: Enumerator[JsValue]) = {
       x >>> res
     }
+
+    println(existingUsers.length)
 
     // return event stream with all existing users pushed
     Ok.chunked(

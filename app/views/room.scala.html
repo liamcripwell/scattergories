@@ -9,17 +9,26 @@
   </p>
   <hr>
 
-  <div class="log"></div>
-  <div id="content"></div>
-  <script>
-    var user = prompt("Username:");
+  <div class="panel panel-default">
+    <div class="panel-heading">Users:</div>
+    <div id="userlist" class="panel-body">
 
+    </div>
+  </div>
+
+<script>
     // handle stream of users in room
     var feed = new EventSource("/userfeed/@room");
     feed.addEventListener("message", function(msg){
       var m = JSON.parse(msg.data);
-      $(".log").append("<div class='message'>" + m.user + "</div>");
+      console.log(m.user);
+      $("#userlist").prepend("<div>" + m.user + "</div>");
     });
+    setTimeout(function() {
+      // rest of code here
+    }, 2000);
+
+    var user = prompt("Username:");
 
     // send new user data to server
     $.ajax({
@@ -28,6 +37,8 @@
       method: "post",
       contentType: "application/json"
     })
+
+    console.log("sent");
 
     // notify server of user leaving room
     window.onbeforeunload = function(){
@@ -39,4 +50,5 @@
       })
     }
   </script>
+<div id="content"></div>
 }

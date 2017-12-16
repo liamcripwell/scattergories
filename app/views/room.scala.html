@@ -7,9 +7,6 @@
     <h1>@title</h1>
     <hr>
 
-    <div id="content"></div>
-    <script type='text/javascript' src='@routes.Assets.versioned("javascripts/userlist.js")'></script>
-
     <p>Share this link with others:
         <a>
             <script>document.write(window.location.href);</script>
@@ -17,59 +14,27 @@
     </p>
     <hr>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">Users:</div>
-        <div id="userlist" class="panel-body">
-
+    @* main content panel *@
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-3 col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Users:</div>
+                    <div id="userlist" class="panel-body"></div>
+                </div>
+            </div>
+            <div class="col-xs-15 col-md-10">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        Content goes here...
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script>
-            // handle stream of users in room
-            var feed = new EventSource("/userfeed/@room");
-
-            feed.addEventListener("message", function(msg){
-                var m = JSON.parse(msg.data);
-                console.log(m.users);
-
-                $("#userlist").html(function(){
-                    updatedUsers = "";
-
-                    m.users.forEach(function(user, i){
-                        updatedUsers += "<div>" + user + "</div>";
-                    });
-
-                    return updatedUsers;
-                });
-            });
-
-            setTimeout(function() {
-                // send new user data to server
-                var user = prompt("Username:");
-                while (user == null || user == ""){
-                    user = prompt("Username:");
-                }
-
-                $.ajax({
-                    url: "/newuser",
-                    data: JSON.stringify({ room: "@room", user: user }),
-                    method: "post",
-                    contentType: "application/json"
-                })
-
-                console.log("sent user information");
-            }, 100);
-
-
-            // notify server of user leaving room
-            window.onbeforeunload = function(){
-                $.ajax({
-                    url: "/removeuser",
-                    data: JSON.stringify({ room: "@room", user: user }),
-                    method: "post",
-                    contentType: "application/json"
-                })
-            }
-    </script>
+    @* reference room in js so it can be accessed by external scripts *@
+    <script>var room = "@room"</script>
+    <script type='text/javascript' src='@routes.Assets.versioned("javascripts/userManagement.js")'></script>
 }
 

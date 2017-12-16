@@ -1,57 +1,72 @@
+
 @(title: String, room: String)
+
 
 @main(title) {
 
-  <p>Share this link with others:
-    <a>
-      <script>document.write(window.location.href);</script>
-    </a>
-  </p>
-  <hr>
+    <h1>@title</h1>
+    <hr>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">Users:</div>
-    <div id="userlist" class="panel-body">
+    <div id="content"></div>
+    <script type='text/javascript' src='@routes.Assets.versioned("javascripts/userlist.js")'></script>
 
+    <p>Share this link with others:
+        <a>
+            <script>document.write(window.location.href);</script>
+        </a>
+    </p>
+    <hr>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Users:</div>
+        <div id="userlist" class="panel-body">
+
+        </div>
     </div>
-  </div>
 
-<script>
-    // handle stream of users in room
-    var feed = new EventSource("/userfeed/@room");
+    <script>
+            // handle stream of users in room
+            var feed = new EventSource("/userfeed/@room");
 
-    feed.addEventListener("message", function(msg){
-      var m = JSON.parse(msg.data);
-      console.log(m.users);
-      // $("#userlist").prepend("<div>" + m.users + "</div>");
-        $("#userlist").html("<div>" + m.users + "</div>");
-    });
+            feed.addEventListener("message", function(msg){
+                var m = JSON.parse(msg.data);
+                console.log(m.users);
 
-    setTimeout(function() {
-        // send new user data to server
-        var user = prompt("Username:");
+                $("#userlist").html(function(){
+                    updatedUsers = "";
 
-        $.ajax({
-            url: "/newuser",
-            data: JSON.stringify({ room: "@room", user: user }),
-            method: "post",
-            contentType: "application/json"
-        })
+                    m.users.forEach(function(user, i){
+                        updatedUsers += "<div>" + user + "</div>";
+                    });
 
-        console.log("sent user information");
-    }, 100);
+                    return updatedUsers;
+                });
+            });
+
+            setTimeout(function() {
+                // send new user data to server
+                var user = prompt("Username:");
+
+                $.ajax({
+                    url: "/newuser",
+                    data: JSON.stringify({ room: "@room", user: user }),
+                    method: "post",
+                    contentType: "application/json"
+                })
+
+                console.log("sent user information");
+            }, 100);
 
 
-    // notify server of user leaving room
-    window.onbeforeunload = function(){
-      $.ajax({
-        url: "/removeuser",
-        data: JSON.stringify({ room: "@room", user: user }),
-        method: "post",
-        contentType: "application/json"
-      })
-    }
-</script>
-<div id="content"></div>
-<script type='text/javascript' src='@routes.Assets.versioned("javascripts/userlist.jsx")'></script>
+            // notify server of user leaving room
+            window.onbeforeunload = function(){
+                $.ajax({
+                    url: "/removeuser",
+                    data: JSON.stringify({ room: "@room", user: user }),
+                    method: "post",
+                    contentType: "application/json"
+                })
+            }
+    </script>
 }
+

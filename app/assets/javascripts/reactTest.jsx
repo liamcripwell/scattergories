@@ -20,6 +20,7 @@ class MyComponent extends React.Component {
             contentType: "application/json",
             success: function (msg) {
                 console.log(msg);
+                //this.history.pushState(null, "/room/" + msg);
                 window.location.href = "/room/" + msg;
             }
         })

@@ -25,7 +25,7 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
 
   /**
     * Enter an existing game room
-    * @param room - id of room to koin
+    * @param room - id of room to join
     * @return page of room
     */
   def enterRoom(room: String) = Action {

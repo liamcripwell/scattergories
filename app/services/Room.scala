@@ -19,8 +19,12 @@ class Room(id: String) {
     */
   def addUser(user: String): Unit = {
     users = users :+ user
+//    usersChannel.push(Json.obj(
+//      "user" -> Json.toJsFieldJsValueWrapper(user)
+//    ))
+
     usersChannel.push(Json.obj(
-      "user" -> user
+      "users" -> Json.toJsFieldJsValueWrapper(users)
     ))
   }
 }

@@ -19,26 +19,28 @@
 <script>
     // handle stream of users in room
     var feed = new EventSource("/userfeed/@room");
+
     feed.addEventListener("message", function(msg){
       var m = JSON.parse(msg.data);
-      console.log(m.user);
-      $("#userlist").prepend("<div>" + m.user + "</div>");
+      console.log(m.users);
+      // $("#userlist").prepend("<div>" + m.users + "</div>");
+        $("#userlist").html("<div>" + m.users + "</div>");
     });
+
     setTimeout(function() {
-      // rest of code here
-    }, 2000);
+        // send new user data to server
+        var user = prompt("Username:");
 
-    var user = prompt("Username:");
+        $.ajax({
+            url: "/newuser",
+            data: JSON.stringify({ room: "@room", user: user }),
+            method: "post",
+            contentType: "application/json"
+        })
 
-    // send new user data to server
-    $.ajax({
-      url: "/newuser",
-      data: JSON.stringify({ room: "@room", user: user }),
-      method: "post",
-      contentType: "application/json"
-    })
+        console.log("sent user information");
+    }, 100);
 
-    console.log("sent");
 
     // notify server of user leaving room
     window.onbeforeunload = function(){
@@ -49,6 +51,7 @@
         contentType: "application/json"
       })
     }
-  </script>
+</script>
 <div id="content"></div>
+<script type='text/javascript' src='@routes.Assets.versioned("javascripts/userlist.jsx")'></script>
 }

@@ -3,7 +3,6 @@ package controllers
 import javax.inject._
 
 import akka.stream.Materializer
-import play.api._
 import play.api.libs.EventSource
 import play.api.libs.iteratee.{Concurrent, Enumerator}
 import play.api.libs.json.{JsValue, Json}
@@ -50,20 +49,26 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     // get users already in room
     val existingUsers = rooms(room).users
       .map { x =>
-        Enumerator.apply[JsValue](Json.obj("user" -> x))
+        Enumerator.apply[JsValue](
+          Json.obj(
+            "user" -> Json.toJsFieldJsValueWrapper(x)
+          )
+        )
       }
+
+    println("Existing users: " + existingUsers.length)
 
     // pushes existing users onto the event stream
     def accumulate(res: Enumerator[JsValue], x: Enumerator[JsValue]) = {
       x >>> res
     }
 
-    println(existingUsers.length)
-
     // return event stream with all existing users pushed
-    Ok.chunked(
-      existingUsers.foldLeft(rooms(room).usersOut)(accumulate)
-        &> EventSource()).as("text/event-stream")
+//    Ok.chunked(
+//      existingUsers.foldLeft(rooms(room).usersOut)(accumulate)
+//        &> EventSource()).as("text/event-stream")
+
+    Ok.chunked(rooms(room).usersOut &> EventSource()).as("text/event-stream")
   }
 
   /**

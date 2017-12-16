@@ -46,6 +46,9 @@
             setTimeout(function() {
                 // send new user data to server
                 var user = prompt("Username:");
+                while (user == null || user == ""){
+                    user = prompt("Username:");
+                }
 
                 $.ajax({
                     url: "/newuser",

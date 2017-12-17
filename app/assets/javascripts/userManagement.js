@@ -1,7 +1,7 @@
 // handle stream of users in room
-var feed = new EventSource("/userfeed/" + room);
+var userFeed = new EventSource("/userfeed/" + room);
 
-feed.addEventListener("message", function(msg){
+userFeed.addEventListener("message", function(msg){
     var m = JSON.parse(msg.data);
     console.log(m.users);
 
@@ -29,10 +29,13 @@ setTimeout(function() {
         url: "/newuser",
         data: JSON.stringify({ room: room, user: user }),
         method: "post",
-        contentType: "application/json"
+        contentType: "application/json",
+        success: function (msg) {
+            console.log(msg);
+        }
     });
 
-    console.log("sent user information");
+    console.log(user + " requests to join " + room);
 }, 100);
 
 

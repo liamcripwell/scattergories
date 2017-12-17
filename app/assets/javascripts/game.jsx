@@ -3,6 +3,20 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
 
+        // handle stream game events
+        var gameFeed = new EventSource("/gamefeed/" + room);
+
+        gameFeed.addEventListener("message", function(msg){
+            var m = JSON.parse(msg.data);
+
+            if (m.type === "start") {
+                this.setState({
+                    inGame: true
+                });
+            }
+
+        }.bind(this));
+
         this.state = {
             inGame: false
         };
@@ -17,10 +31,6 @@ class Game extends React.Component {
             success: function (msg) {
                 console.log(msg);
             }
-        });
-
-        this.setState({
-            inGame: true
         });
     }
 

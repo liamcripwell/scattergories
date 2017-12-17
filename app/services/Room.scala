@@ -10,8 +10,9 @@ import play.api.libs.json.{JsValue, Json}
   */
 class Room(id: String) {
 
-  // User list broadcast channel
+  // broadcast channels
   val (usersOut, usersChannel) = Concurrent.broadcast[JsValue]
+  val (gameOut, gameChannel) = Concurrent.broadcast[JsValue]
 
   var users = List[String]()
   var locked = false
@@ -29,6 +30,13 @@ class Room(id: String) {
         "users" -> Json.toJsFieldJsValueWrapper(users)
       ))
     }
+  }
+
+  def startGame(): Unit = {
+    locked = true
+    gameChannel.push(Json.obj(
+      "type" -> Json.toJsFieldJsValueWrapper("start")
+    ))
   }
 
 }

@@ -5,6 +5,7 @@
 GET     /                           controllers.HomeController.index
 GET     /room/*room                 controllers.HomeController.enterRoom(room)
 GET     /userfeed/*room             controllers.HomeController.userFeed(room)
+GET     /gamefeed/*room             controllers.HomeController.gameFeed(room)
 
 # POST request routes
 POST    /newroom                    controllers.HomeController.createRoom

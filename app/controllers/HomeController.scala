@@ -45,9 +45,14 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     * @param room id of room
     * @return an event stream of users
     */
-  def userFeed(room: String) = Action { req =>
+  def userFeed(room: String) = Action { _ =>
     println("Someone joined room " + room)
     Ok.chunked(rooms(room).usersOut &> EventSource()).as("text/event-stream")
+  }
+
+
+  def gameFeed(room: String) = Action { _ =>
+    Ok.chunked(rooms(room).gameOut &> EventSource()).as("text/event-stream")
   }
 
   /**
@@ -77,10 +82,12 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     val user = req.body.\\("user").head.toString.replaceAll("\"", "")
     val room = req.body.\\("room").head.toString.replaceAll("\"", "")
 
+    println(s"$user / $room")
+
     // add user to room's users
     rooms(room).addUser(user)
     println(room + " members: " + rooms(room).users)
-    Ok
+    Ok(s"$user -> $room")
   }
 
   /**
@@ -123,7 +130,7 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     */
   def lockRoom() = Action(parse.json) { req =>
     val room = req.body.\\("room").head.toString.replaceAll("\"", "")
-    rooms(room).locked = true
+    rooms(room).startGame()
     println(s"Room $room has been locked...")
     Ok
   }

@@ -2,15 +2,16 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
-POST     /newroom                 controllers.HomeController.createRoom
-GET     /room/*room           controllers.HomeController.enterRoom(room)
-POST    /newuser              controllers.HomeController.newUser
-POST    /removeuser              controllers.HomeController.removeUser
-GET     /userfeed/*room                     controllers.HomeController.userFeed(room)
+GET     /room/*room                 controllers.HomeController.enterRoom(room)
+GET     /userfeed/*room             controllers.HomeController.userFeed(room)
+
+# POST request routes
+POST    /newroom                    controllers.HomeController.createRoom
+POST    /newuser                    controllers.HomeController.newUser
+POST    /removeuser                 controllers.HomeController.removeUser
+POST    /lockroom                   controllers.HomeController.lockRoom
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-
 GET     /webjars/*file              controllers.WebJarAssets.at(file)

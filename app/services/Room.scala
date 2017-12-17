@@ -10,21 +10,25 @@ import play.api.libs.json.{JsValue, Json}
   */
 class Room(id: String) {
 
-  var users = List[String]()
+  // User list broadcast channel
   val (usersOut, usersChannel) = Concurrent.broadcast[JsValue]
+
+  var users = List[String]()
+  var locked = false
 
   /**
     * Adds the user to users and pushes event into event channel
     * @param user name of the new user
     */
   def addUser(user: String): Unit = {
-    users = users :+ user
-//    usersChannel.push(Json.obj(
-//      "user" -> Json.toJsFieldJsValueWrapper(user)
-//    ))
+    if (!locked) {
+      users = users :+ user
 
-    usersChannel.push(Json.obj(
-      "users" -> Json.toJsFieldJsValueWrapper(users)
-    ))
+      // push current set of users to channel
+      usersChannel.push(Json.obj(
+        "users" -> Json.toJsFieldJsValueWrapper(users)
+      ))
+    }
   }
+
 }

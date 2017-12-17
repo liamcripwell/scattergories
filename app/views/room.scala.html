@@ -1,7 +1,6 @@
 
 @(title: String, room: String)
 
-
 @main(title) {
 
     <h1>@title</h1>
@@ -36,6 +35,6 @@
     @* reference room in js so it can be accessed by external scripts *@
     <script>var room = "@room"</script>
     <script type='text/javascript' src='@routes.Assets.versioned("javascripts/userManagement.js")'></script>
-    <script type='text/javascript' src='@routes.Assets.versioned("javascripts/userlist.js")'></script>
+    <script type='text/javascript' src='@routes.Assets.versioned("javascripts/game.js")'></script>
 }
 

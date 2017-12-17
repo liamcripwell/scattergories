@@ -30,7 +30,11 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     */
   def enterRoom(room: String) = Action {
     if (rooms.contains(room)) {
-      Ok(views.html.room(room, room))
+      if (rooms(room).locked){
+        Ok(views.html.noroom("This room is locked"))
+      } else {
+        Ok(views.html.room(room, room))
+      }
     } else {
       Ok(views.html.noroom("No such room"))
     }
@@ -44,8 +48,6 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
   def userFeed(room: String) = Action { req =>
     println("Someone joined room " + room)
 
-    println(rooms(room).users.mkString(", "))
-
     // get users already in room
     val existingUsers = rooms(room).users
       .map { x =>
@@ -56,8 +58,7 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
         )
       }
 
-    println("Existing users: " + existingUsers.length)
-
+    // TODO: clean up redundant code here
     // pushes existing users onto the event stream
     def accumulate(res: Enumerator[JsValue], x: Enumerator[JsValue]) = {
       x >>> res
@@ -96,7 +97,7 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
 
   /**
     * Adds a new user to a room
-    * @return
+    * @return success status
     */
   def newUser() = Action(parse.json) { req =>
     // extract data from request
@@ -111,7 +112,7 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
 
   /**
     * Removes a user from a room
-    * @return
+    * @return success status
     */
   def removeUser() = Action(parse.json) { req =>
     // extract data from request
@@ -128,4 +129,19 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     Ok
   }
 
+  /**
+    * Locks a room, preventing further users from joining
+    * TODO:
+    *   - handle room locking before player has entered name
+    *   - update all player interfaces upon lock
+    *   - improve failed room join page
+    *   - handle unlocking of room
+    * @return success status
+    */
+  def lockRoom() = Action(parse.json) { req =>
+    val room = req.body.\\("room").head.toString.replaceAll("\"", "")
+    rooms(room).locked = true
+    println(s"Room $room has been locked...")
+    Ok
+  }
 }

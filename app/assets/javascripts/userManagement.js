@@ -16,9 +16,11 @@ feed.addEventListener("message", function(msg){
     });
 });
 
+var user = "";
+
 setTimeout(function() {
     // send new user data to server
-    var user = prompt("Username:");
+    user = prompt("Username:");
     while (user === null || user === ""){
         user = prompt("Username:");
     }

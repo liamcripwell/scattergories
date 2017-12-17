@@ -4,8 +4,6 @@ import javax.inject._
 
 import akka.stream.Materializer
 import play.api.libs.EventSource
-import play.api.libs.iteratee.{Concurrent, Enumerator}
-import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import services.Room
 
@@ -29,15 +27,17 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     * @return page of room
     */
   def enterRoom(room: String) = Action {
-    if (rooms.contains(room)) {
-      if (rooms(room).locked){
-        Ok(views.html.noroom("This room is locked"))
+    Ok(
+      if (rooms.contains(room)) {
+        if (rooms(room).locked) {
+          views.html.noroom("This room is locked")
+        } else {
+          views.html.room(room, room)
+        }
       } else {
-        Ok(views.html.room(room, room))
+        views.html.noroom("No such room")
       }
-    } else {
-      Ok(views.html.noroom("No such room"))
-    }
+    )
   }
 
   /**
@@ -47,28 +47,6 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     */
   def userFeed(room: String) = Action { req =>
     println("Someone joined room " + room)
-
-    // get users already in room
-    val existingUsers = rooms(room).users
-      .map { x =>
-        Enumerator.apply[JsValue](
-          Json.obj(
-            "user" -> Json.toJsFieldJsValueWrapper(x)
-          )
-        )
-      }
-
-    // TODO: clean up redundant code here
-    // pushes existing users onto the event stream
-    def accumulate(res: Enumerator[JsValue], x: Enumerator[JsValue]) = {
-      x >>> res
-    }
-
-    // return event stream with all existing users pushed
-//    Ok.chunked(
-//      existingUsers.foldLeft(rooms(room).usersOut)(accumulate)
-//        &> EventSource()).as("text/event-stream")
-
     Ok.chunked(rooms(room).usersOut &> EventSource()).as("text/event-stream")
   }
 
@@ -88,11 +66,6 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
 
     // respond to client
     Ok(id)
-  }
-
-  def removeRoom(room: String): Unit = {
-    rooms -= room
-    println("Current rooms: " + rooms.keySet)
   }
 
   /**
@@ -115,17 +88,27 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     * @return success status
     */
   def removeUser() = Action(parse.json) { req =>
+    // TODO:
+    //  - trigger user list broadcast event
+    //  - fix faulty room deletion
+
     // extract data from request
     val user = req.body.\\("user").head.toString.replaceAll("\"", "")
     val room = req.body.\\("room").head.toString.replaceAll("\"", "")
 
-    // remove user from room's users
-    rooms(room).users.size match {
-      case x if x > 1 =>
-        rooms(room).users = rooms(room).users.filter(_!=user)
-        println(room + " members: " + rooms(room).users)
-      case _          => removeRoom(room)
+    println(s"$user has left room $room...")
+
+    // if there are more than one user
+    if (rooms(room).users.lengthCompare(1) == 1) {
+      // remove this user from room
+      rooms(room).users = rooms(room).users.filter(_!=user)
+      println(room + " members: " + rooms(room).users)
+    } else {
+      // delete the room
+      rooms -= room
+      println("Current rooms: " + rooms.keySet)
     }
+
     Ok
   }
 

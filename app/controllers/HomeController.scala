@@ -62,7 +62,7 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
   def createRoom() = Action(parse.json) { req =>
     // generate random room id
     val r = scala.util.Random
-    val id = (for (i <- 0 to 5) yield r.alphanumeric.filter(_.isLetter).head)
+    val id = (for (_ <- 0 to 5) yield r.alphanumeric.filter(_.isLetter).head)
       .toList.mkString
 
     // add new room to rooms
@@ -123,7 +123,6 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     * Locks a room, preventing further users from joining
     * TODO:
     *   - handle room locking before player has entered name
-    *   - update all player interfaces upon lock
     *   - improve failed room join page
     *   - handle unlocking of room
     * @return success status

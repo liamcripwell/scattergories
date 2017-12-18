@@ -6,7 +6,7 @@ userFeed.addEventListener("message", function(msg){
     console.log(m.users);
 
     $("#userlist").html(function(){
-        updatedUsers = "";
+        var updatedUsers = "";
 
         m.users.forEach(function(user, i){
             updatedUsers += "<div>" + user + "</div>";

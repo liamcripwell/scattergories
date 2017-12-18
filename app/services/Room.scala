@@ -17,6 +17,9 @@ class Room(id: String) {
   var users = List[String]()
   var locked = false
 
+  val r = scala.util.Random
+  var letter = r.alphanumeric.filter(_.isLetter).head.toUpper.toString
+
   /**
     * Adds the user to users and pushes event into event channel
     * @param user name of the new user
@@ -35,7 +38,8 @@ class Room(id: String) {
   def startGame(): Unit = {
     locked = true
     gameChannel.push(Json.obj(
-      "type" -> Json.toJsFieldJsValueWrapper("start")
+      "type" -> Json.toJsFieldJsValueWrapper("start"),
+      "letter" -> Json.toJsFieldJsValueWrapper(letter)
     ))
   }
 

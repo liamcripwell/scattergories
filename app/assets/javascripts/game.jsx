@@ -11,7 +11,8 @@ class Game extends React.Component {
 
             if (m.type === "start") {
                 this.setState({
-                    inGame: true
+                    inGame: true,
+                    letter: m.letter
                 });
             }
 
@@ -37,7 +38,7 @@ class Game extends React.Component {
     render() {
         if (this.state.inGame) {
             return (
-                <p>You're in for it now boyo...</p>
+                <p>The current letter is... {this.state.letter}</p>
             )
         } else {
             return (

@@ -12,6 +12,7 @@ POST    /newroom                    controllers.HomeController.createRoom
 POST    /newuser                    controllers.HomeController.newUser
 POST    /removeuser                 controllers.HomeController.removeUser
 POST    /lockroom                   controllers.HomeController.lockRoom
+POST    /userready                  controllers.HomeController.userReady
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

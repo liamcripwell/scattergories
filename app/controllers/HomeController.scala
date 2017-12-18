@@ -5,7 +5,7 @@ import javax.inject._
 import akka.stream.Materializer
 import play.api.libs.EventSource
 import play.api.mvc._
-import services.Room
+import models.Room
 
 
 /**
@@ -86,7 +86,7 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
 
     // add user to room's users
     rooms(room).addUser(user)
-    println(room + " members: " + rooms(room).users)
+    println(room + " members: " + rooms(room).users.map(_.name))
     Ok(s"$user -> $room")
   }
 
@@ -131,6 +131,16 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     val room = req.body.\\("room").head.toString.replaceAll("\"", "")
     rooms(room).startGame()
     println(s"Room $room has been locked...")
+    Ok
+  }
+
+  def userReady() = Action(parse.json) { req =>
+    val room = req.body.\\("room").head.toString.replaceAll("\"", "")
+    val user = req.body.\\("user").head.toString.replaceAll("\"", "")
+
+    // TODO - improve username acquisition
+    rooms(room).ready(user)
+
     Ok
   }
 }

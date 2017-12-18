@@ -1,4 +1,4 @@
-package services
+package models
 
 import play.api.libs.iteratee.Concurrent
 import play.api.libs.json.{JsValue, Json}
@@ -8,13 +8,13 @@ import play.api.libs.json.{JsValue, Json}
   *
   * @param id - room identifier
   */
-class Room(id: String) {
+class Room (id: String) {
 
   // broadcast channels
   val (usersOut, usersChannel) = Concurrent.broadcast[JsValue]
   val (gameOut, gameChannel) = Concurrent.broadcast[JsValue]
 
-  var users = List[String]()
+  var users = List[User]()
   var locked = false
 
   val r = scala.util.Random
@@ -22,15 +22,16 @@ class Room(id: String) {
 
   /**
     * Adds the user to users and pushes event into event channel
-    * @param user name of the new user
+    * @param name name of the new user
     */
-  def addUser(user: String): Unit = {
+  // TODO: enforce unique names
+  def addUser(name: String): Unit = {
     if (!locked) {
-      users = users :+ user
+      users = users :+ new User(name)
 
       // push current set of users to channel
       usersChannel.push(Json.obj(
-        "users" -> Json.toJsFieldJsValueWrapper(users)
+        "users" -> Json.toJsFieldJsValueWrapper(users.map(_.name))
       ))
     }
   }
@@ -40,6 +41,15 @@ class Room(id: String) {
     gameChannel.push(Json.obj(
       "type" -> Json.toJsFieldJsValueWrapper("start"),
       "letter" -> Json.toJsFieldJsValueWrapper(letter)
+    ))
+  }
+
+  def ready(name: String): Unit = {
+    users.find(_.name == name).get.ready = true
+
+    gameChannel.push(Json.obj(
+      "type" -> Json.toJsFieldJsValueWrapper("userready"),
+      "user" -> Json.toJsFieldJsValueWrapper(name)
     ))
   }
 

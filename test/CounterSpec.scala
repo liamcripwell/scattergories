@@ -1,7 +1,7 @@
 import org.scalatestplus.play._
 
 import scala.collection.mutable
-import services.Counter
+import models.Counter
 
 /** Example of test for Guice-injected component. */
 class CounterSpec extends PlaySpec with OneAppPerSuite {

@@ -1,4 +1,4 @@
-package services
+package models
 
 import java.time.{Clock, Instant}
 import javax.inject._

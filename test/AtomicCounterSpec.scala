@@ -1,6 +1,6 @@
 import org.scalatestplus.play._
 
-import services.AtomicCounter
+import models.AtomicCounter
 
 /** A very simple unit-test example. */
 class AtomicCounterSpec extends PlaySpec {

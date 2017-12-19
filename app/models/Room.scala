@@ -14,7 +14,7 @@ class Room (id: String) {
   val (usersOut, usersChannel) = Concurrent.broadcast[JsValue]
   val (gameOut, gameChannel) = Concurrent.broadcast[JsValue]
 
-  var users = List[User]()
+  var users = Map[String, User]()
   var locked = false
 
   val r = scala.util.Random
@@ -27,11 +27,11 @@ class Room (id: String) {
   // TODO: enforce unique names
   def addUser(name: String): Unit = {
     if (!locked) {
-      users = users :+ new User(name)
+      users += name -> new User(name)
 
       // push current set of users to channel
       usersChannel.push(Json.obj(
-        "users" -> Json.toJsFieldJsValueWrapper(users.map(_.name))
+        "users" -> Json.toJsFieldJsValueWrapper(users.keys)
       ))
     }
   }
@@ -45,7 +45,7 @@ class Room (id: String) {
   }
 
   def ready(name: String): Unit = {
-    users.find(_.name == name).get.ready = true
+    users(name).ready = true
 
     gameChannel.push(Json.obj(
       "type" -> Json.toJsFieldJsValueWrapper("userready"),

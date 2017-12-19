@@ -7,6 +7,8 @@ import play.api.libs.EventSource
 import play.api.mvc._
 import models.Room
 
+// TODO
+//   - fragment this class into several different controllers
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -86,7 +88,7 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
 
     // add user to room's users
     rooms(room).addUser(user)
-    println(room + " members: " + rooms(room).users.map(_.name))
+    println(room + " members: " + rooms(room).users.keys)
     Ok(s"$user -> $room")
   }
 
@@ -106,7 +108,7 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     println(s"$user has left room $room...")
 
     // if there are more than one user
-    if (rooms(room).users.lengthCompare(1) == 1) {
+    if (rooms(room).users.size > 1) {
       // remove this user from room
       rooms(room).users = rooms(room).users.filter(_!=user)
       println(room + " members: " + rooms(room).users)

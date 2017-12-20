@@ -29,11 +29,30 @@ class Room (id: String) {
     if (!locked) {
       users += name -> new User(name)
 
+      println(s"$name has joined room $id...")
+      println(id + " members: " + users.keys)
+
       // push current set of users to channel
       usersChannel.push(Json.obj(
         "users" -> Json.toJsFieldJsValueWrapper(users.keys)
       ))
     }
+  }
+
+  /**
+    * Removes user from room and pushes event into event channel
+    * @param name name of the new user
+    */
+  def removeUser(name: String): Unit = {
+    users -= name
+
+    println(s"$name has left room $id...")
+    println(id + " members: " + users.keys)
+
+    // push current set of users to channel
+    usersChannel.push(Json.obj(
+      "users" -> Json.toJsFieldJsValueWrapper(users.keys)
+    ))
   }
 
   def startGame(): Unit = {

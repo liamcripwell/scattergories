@@ -84,11 +84,9 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     val user = req.body.\\("user").head.toString.replaceAll("\"", "")
     val room = req.body.\\("room").head.toString.replaceAll("\"", "")
 
-    println(s"$user / $room")
-
-    // add user to room's users
+    // add user to room
     rooms(room).addUser(user)
-    println(room + " members: " + rooms(room).users.keys)
+
     Ok(s"$user -> $room")
   }
 
@@ -97,23 +95,15 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     * @return success status
     */
   def removeUser() = Action(parse.json) { req =>
-    // TODO:
-    //  - trigger user list broadcast event
-    //  - fix faulty room deletion
-
     // extract data from request
     val user = req.body.\\("user").head.toString.replaceAll("\"", "")
     val room = req.body.\\("room").head.toString.replaceAll("\"", "")
 
-    println(s"$user has left room $room...")
+    // remove user from room
+    rooms(room).removeUser(user)
 
-    // if there are more than one user
-    if (rooms(room).users.size > 1) {
-      // remove this user from room
-      rooms(room).users = rooms(room).users.filter(_!=user)
-      println(room + " members: " + rooms(room).users)
-    } else {
-      // delete the room
+    // delete empty rooms
+    if (rooms(room).users.isEmpty) {
       rooms -= room
       println("Current rooms: " + rooms.keySet)
     }

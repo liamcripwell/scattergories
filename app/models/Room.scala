@@ -25,17 +25,21 @@ class Room (id: String) {
     * @param name name of the new user
     */
   // TODO: enforce unique names
-  def addUser(name: String): Unit = {
+  def addUser(name: String) = {
     if (!locked) {
-      users += name -> new User(name)
+      if (!users.contains(name)) {
+        users += name -> new User(name)
 
-      println(s"$name has joined room $id...")
-      println(id + " members: " + users.keys)
+        println(s"$name has joined room $id...")
+        println(id + " members: " + users.keys)
 
-      // push current set of users to channel
-      usersChannel.push(Json.obj(
-        "users" -> Json.toJsFieldJsValueWrapper(users.keys)
-      ))
+        // push current set of users to channel
+        usersChannel.push(Json.obj(
+          "users" -> Json.toJsFieldJsValueWrapper(users.keys)
+        ))
+
+        true
+      } else { false }
     }
   }
 

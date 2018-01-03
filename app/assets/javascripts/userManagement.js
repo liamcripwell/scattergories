@@ -21,13 +21,13 @@ var user = "";
 setTimeout(function() {
     // send new user data to server
     user = prompt("Username:");
-    while (user === null || user === ""){
+    while (user === null || user === "") {
         user = prompt("Username:");
     }
 
     $.ajax({
         url: "/newuser",
-        data: JSON.stringify({ room: room, user: user }),
+        data: JSON.stringify({room: room, user: user}),
         method: "post",
         contentType: "application/json",
         success: function (msg) {

@@ -84,10 +84,8 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     val user = req.body.\\("user").head.toString.replaceAll("\"", "")
     val room = req.body.\\("room").head.toString.replaceAll("\"", "")
 
-    // add user to room
-    rooms(room).addUser(user)
-
-    Ok(s"$user -> $room")
+    // add user to room and send result to client
+    Ok(rooms(room).addUser(user).toString)
   }
 
   /**
@@ -114,7 +112,6 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
   /**
     * Locks a room, preventing further users from joining
     * TODO:
-    *   - handle room locking before player has entered name
     *   - improve failed room join page
     *   - handle unlocking of room
     * @return success status

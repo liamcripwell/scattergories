@@ -25,9 +25,12 @@ class Room (id: String) {
     * @param name name of the new user
     */
   // TODO: enforce unique names
-  def addUser(name: String) = {
+  def addUser(name: String): Boolean = {
     if (!locked) {
-      if (!users.contains(name)) {
+
+      if (users.contains(name)) {
+        addUser(name + "(2)")
+      } else {
         users += name -> new User(name)
 
         println(s"$name has joined room $id...")
@@ -39,8 +42,9 @@ class Room (id: String) {
         ))
 
         true
-      } else { false }
-    }
+      }
+
+    } else { false }
   }
 
   /**

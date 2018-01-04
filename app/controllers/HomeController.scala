@@ -85,7 +85,9 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     val room = req.body.\\("room").head.toString.replaceAll("\"", "")
 
     // add user to room and send result to client
-    Ok(rooms(room).addUser(user).toString)
+    rooms(room).addUser(user)
+
+    Ok
   }
 
   /**

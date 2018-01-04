@@ -28,9 +28,15 @@ class Room (id: String) {
   def addUser(name: String): Boolean = {
     if (!locked) {
 
+      // append with a number in ()'s if a duplicate name is encountered
       if (users.contains(name)) {
-        addUser(name + "(2)")
+        addUser(
+          if (")" == (name takeRight 1)) {
+            name.dropRight(2) + (name.takeRight(2).head.asDigit + 1).toString + ")"
+          } else { name + "(2)"}
+        )
       } else {
+        // add new user to to users
         users += name -> new User(name)
 
         println(s"$name has joined room $id...")

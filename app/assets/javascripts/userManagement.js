@@ -38,25 +38,6 @@ setTimeout(function() {
     console.log(user + " requests to join " + room);
 }, 100);
 
-function createUser(name) {
-    while (user === null || user === "") {
-        user = prompt("Username:");
-    }
-
-    $.ajax({
-        url: "/newuser",
-        data: JSON.stringify({room: room, user: user}),
-        method: "post",
-        contentType: "application/json",
-        success: function (msg) {
-            console.log(msg);
-        }
-    });
-
-    console.log(user + " requests to join " + room);
-}
-
-
 // notify server of user leaving room
 window.onbeforeunload = function(){
     $.ajax({

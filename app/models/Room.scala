@@ -24,12 +24,11 @@ class Room (id: String) {
     * Adds the user to users and pushes event into event channel
     * @param name name of the new user
     */
-  // TODO: enforce unique names
   def addUser(name: String): Boolean = {
     if (!locked) {
 
-      // append with a number in ()'s if a duplicate name is encountered
       if (users.contains(name)) {
+        // append with a number in ()'s if a duplicate name is encountered
         addUser(
           if (")" == (name takeRight 1)) {
             name.dropRight(2) + (name.takeRight(2).head.asDigit + 1).toString + ")"
@@ -71,6 +70,7 @@ class Room (id: String) {
 
   def startGame(): Unit = {
     locked = true
+
     gameChannel.push(Json.obj(
       "type" -> Json.toJsFieldJsValueWrapper("start"),
       "letter" -> Json.toJsFieldJsValueWrapper(letter)

@@ -25,10 +25,25 @@ class Game extends React.Component {
                 letter: m.letter
             });
         } else if (m.type === "userready" && m.user === user) {
+
+            var answerInputs = [];
+
+            $("#answers :input").each(function() {
+                if ($(this).attr("type") === "text"){
+                    var id = $(this).attr("id");
+
+                    answerInputs.push($(this).val().toString());
+                }
+            });
+
+            console.log(answerInputs.length);
+            answerInputs.forEach(function(x){console.log(x)})
+
             this.setState({
                 inGame: true,
                 letter: this.state.letter,
-                ready: true
+                ready: true,
+                answers: answerInputs
             });
         }
     }
@@ -70,29 +85,34 @@ class Game extends React.Component {
             );
         } else if (this.state.ready !== true) {
             return (
-                <div>
+                <div id="answers">
                     <p>The current letter is... {this.state.letter}</p>
                     <br/>
                     <div className="input-group">
-                        <span className="input-group-addon" id="basic-addon1">cat1</span>
-                        <input type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon1" />
+                        <span className="input-group-addon" id="basic-addon1">Fictional Character</span>
+                        <input id="character" type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon1" />
                     </div>
                     <div className="input-group">
-                        <span className="input-group-addon" id="basic-addon2">cat2</span>
-                        <input type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon2" />
+                        <span className="input-group-addon" id="basic-addon2">Location</span>
+                        <input id="location" type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon2" />
                     </div>
                     <div className="input-group">
-                        <span className="input-group-addon" id="basic-addon3">cat3</span>
-                        <input type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon3" />
+                        <span className="input-group-addon" id="basic-addon3">Animal</span>
+                        <input id="animal" type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon3" />
                     </div>
 
-                    <button onClick={this.userReady.bind(this)}>I'm ready!</button>
+                    <button id="button" onClick={this.userReady.bind(this)}>I'm ready!</button>
                 </div>
             );
         } else if (this.state.ready) {
             return (
                 <div>
-                    <p>Nice going big boy...</p>
+                    <p>Your answers were..</p>
+                    {
+                        this.state.answers.map(x => <li>{x}</li>)
+                    }
+                    <br/>
+                    <p>Current Letter: {this.state.letter}</p>
                 </div>
             )
         }

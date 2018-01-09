@@ -110,16 +110,25 @@ class Game extends React.Component {
             var answersHtml = [];
             for (var property in this.state.answers) {
                 if (this.state.answers.hasOwnProperty(property)) {
-                    answersHtml.push(<li key={property}>{property}: {this.state.answers[property]}</li>);
+                    answersHtml.push(
+                        <div class="results-input-group" key={property}>
+                            <span class="input-group-addon">
+                                    {property}: {this.state.answers[property]}
+                            </span>
+                            <span class="input-group-addon">
+                                <input type="checkbox" aria-label="..." />
+                            </span>
+                        </div>
+                    );
                 }
             }
 
             return (
                 <div>
                     <p>Your answers were..</p>
-                    {
-                        answersHtml
-                    }
+
+                    {answersHtml}
+
                     <br/>
                     <p>Current Letter: {this.state.letter}</p>
                 </div>

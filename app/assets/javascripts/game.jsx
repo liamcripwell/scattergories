@@ -27,12 +27,13 @@ class Game extends React.Component {
         } else if (m.type === "userready" && m.user === user) {
 
             var answerInputs = [];
+            var obj = {};
 
             $("#answers :input").each(function() {
                 if ($(this).attr("type") === "text"){
                     var id = $(this).attr("id");
-
-                    answerInputs.push($(this).val().toString());
+                    obj[id] = $(this).val().toString();
+                    answerInputs.push(obj);
                 }
             });
 
@@ -43,7 +44,7 @@ class Game extends React.Component {
                 inGame: true,
                 letter: this.state.letter,
                 ready: true,
-                answers: answerInputs
+                answers: obj
             });
         }
     }
@@ -105,11 +106,19 @@ class Game extends React.Component {
                 </div>
             );
         } else if (this.state.ready) {
+
+            var answersHtml = [];
+            for (var property in this.state.answers) {
+                if (this.state.answers.hasOwnProperty(property)) {
+                    answersHtml.push(<li key={property}>{property}: {this.state.answers[property]}</li>);
+                }
+            }
+
             return (
                 <div>
                     <p>Your answers were..</p>
                     {
-                        this.state.answers.map(x => <li>{x}</li>)
+                        answersHtml
                     }
                     <br/>
                     <p>Current Letter: {this.state.letter}</p>

@@ -76,8 +76,13 @@ class Game extends React.Component {
         });
     }
 
+    // handles modification of a user's score
     modifyScore(check) {
-        console.log(check);
+        if($("#" + check).is(":checked")){
+            console.log(check);
+        } else {
+            console.log("poo");
+        }
     }
 
     render() {

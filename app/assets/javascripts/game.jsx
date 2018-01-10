@@ -76,6 +76,10 @@ class Game extends React.Component {
         });
     }
 
+    modifyScore(check) {
+        console.log(check);
+    }
+
     render() {
         if (!this.state.inGame) {
             return (
@@ -117,7 +121,7 @@ class Game extends React.Component {
                                     {property}: {this.state.answers[property]}
                             </span>
                             <span className="input-group-addon">
-                                <input type="checkbox" aria-label="..." />
+                                <input type="checkbox" aria-label="..." id={property} onClick={this.modifyScore.bind(this, property)} />
                             </span>
                             <br/>
                         </div>

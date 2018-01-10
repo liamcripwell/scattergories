@@ -107,30 +107,41 @@ class Game extends React.Component {
             );
         } else if (this.state.ready) {
 
+            // construct list of inputs for all answers
             var answersHtml = [];
             for (var property in this.state.answers) {
                 if (this.state.answers.hasOwnProperty(property)) {
                     answersHtml.push(
-                        <div class="results-input-group" key={property}>
-                            <span class="input-group-addon">
+                        <div className="results-input-group" key={property}>
+                            <span className="input-group-addon">
                                     {property}: {this.state.answers[property]}
                             </span>
-                            <span class="input-group-addon">
+                            <span className="input-group-addon">
                                 <input type="checkbox" aria-label="..." />
                             </span>
+                            <br/>
                         </div>
                     );
                 }
             }
 
+            // update interface
             return (
                 <div>
-                    <p>Your answers were..</p>
-
-                    {answersHtml}
-
-                    <br/>
                     <p>Current Letter: {this.state.letter}</p>
+                    <br/>
+                    <div className="row">
+                        <div className="col-xs-3 col-md-2">
+                        </div>
+                        <div className="col-xs-5 col-md-3">
+                            <div className="panel panel-default">
+                                <div className="panel-heading">{user}</div>
+                                <div className="panel-body">
+                                    {answersHtml}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )
         }

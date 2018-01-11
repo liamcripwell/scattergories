@@ -19,6 +19,7 @@ class Room (id: String) {
 
   val r = scala.util.Random
   var letter = r.alphanumeric.filter(_.isLetter).head.toUpper.toString
+  val evalState = new EvalState(id, users.keys.toList)
 
   /**
     * Adds the user to users and pushes event into event channel

@@ -2,6 +2,7 @@ package models
 
 import java.util.Locale.Category
 
+import controllers.rooms
 import play.api.libs.iteratee.Concurrent
 import play.api.libs.json.{JsValue, Json}
 
@@ -87,9 +88,7 @@ class Room (id: String) {
 
     gameChannel.push(Json.obj(
       "type" -> Json.toJsFieldJsValueWrapper("evalstate"),
-      "user" -> Json.toJsFieldJsValueWrapper(user),
-      "category" -> Json.toJsFieldJsValueWrapper(category),
-      "state" -> Json.toJsFieldJsValueWrapper(evalState.memberStates(user).answerMatrix(category))
+      "state" -> Json.toJsFieldJsValueWrapper(Json.toJson(evalState))
     ))
   }
 

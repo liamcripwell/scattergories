@@ -47,7 +47,7 @@ class Game extends React.Component {
                 answers: obj
             });
         } else if (m.type === "evalstate") {
-            console.log(m.category + " for " + m.user + " has been set to " + m.state)
+            console.log(m.state)
         }
     }
 

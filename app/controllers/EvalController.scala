@@ -3,7 +3,6 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import akka.stream.Materializer
-import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 
 @Singleton
@@ -27,7 +26,7 @@ class EvalController @Inject() (implicit val mat: Materializer) extends Controll
     rooms(room).changeEvalState(user, category)
 
     // send modified state back to the user
-    Ok(Json.toJson(rooms(room).evalState))
+    Ok
   }
 
 }

@@ -18,7 +18,7 @@ class EvalMember (val name: String) {
 
     if (answerMatrix.contains(category)) {
       answerMatrix += (category -> !answerMatrix(category))
-      println(s"Modified answer: $category -> ${answerMatrix(category)}")
+      println(s"Modified answer of $name: $category -> ${answerMatrix(category)}")
     } else {
       println("The specified category doesn't exist within this specification...")
     }

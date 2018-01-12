@@ -94,7 +94,10 @@ class Game extends React.Component {
                 "category": check
             } ),
             method: "post",
-            contentType: "application/json"
+            contentType: "application/json",
+            success: function (msg) {
+                console.log(msg);
+            }
         });
     }
 

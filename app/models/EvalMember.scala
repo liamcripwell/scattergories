@@ -1,6 +1,6 @@
 package models
 
-class EvalMember (name: String) {
+class EvalMember (val name: String) {
 
   var roundScore = 0
   var agreement = false

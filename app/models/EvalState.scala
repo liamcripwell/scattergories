@@ -1,6 +1,6 @@
 package models
 
-class EvalState (room: String, users: Map[String, User]) {
+class EvalState (val room: String, val users: Map[String, User]) {
 
   var memberStates = clearState()
 

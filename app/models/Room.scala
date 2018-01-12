@@ -19,7 +19,7 @@ class Room (id: String) {
 
   val r = scala.util.Random
   var letter = r.alphanumeric.filter(_.isLetter).head.toUpper.toString
-  val evalState = new EvalState(id, users.keys.toList)
+  var evalState = new EvalState(id, users)
 
   /**
     * Adds the user to users and pushes event into event channel
@@ -70,7 +70,9 @@ class Room (id: String) {
   }
 
   def startGame(): Unit = {
+    // lock room and reset evalState
     locked = true
+    evalState = new EvalState(id, users)
 
     gameChannel.push(Json.obj(
       "type" -> Json.toJsFieldJsValueWrapper("start"),

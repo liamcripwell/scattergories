@@ -83,6 +83,20 @@ class Game extends React.Component {
         } else {
             console.log("poo");
         }
+
+        $.ajax({
+            url: "/toggleanswer",
+            data: JSON.stringify( {
+                "room": room,
+                "user": user,
+                "category": check
+            } ),
+            method: "post",
+            contentType: "application/json",
+            success: function (msg) {
+                console.log(msg);
+            }
+        });
     }
 
     render() {

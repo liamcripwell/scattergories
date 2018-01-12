@@ -3,7 +3,7 @@ package models
 class EvalMember (name: String) {
 
   var roundScore = 0
-  var agreement = true
+  var agreement = false
   var answerMatrix = Map(
     "character" -> false,
     "location"  -> false,
@@ -12,7 +12,7 @@ class EvalMember (name: String) {
 
   /**
     * Toggles the true/false value of a specified answer
-    * @param category the category of which to toggle the answer
+    * @param category the category of which to toggle the answer of
     */
   def toggleAnswer(category: String): Unit = {
 

@@ -22,7 +22,7 @@ class EvalController @Inject() (implicit val mat: Materializer) extends Controll
     val user = req.body.\\("user").head.toString.replaceAll("\"", "")
     val category = req.body.\\("category").head.toString.replaceAll("\"", "")
 
-    rooms(room).evalState.toggleAnswer(user, category)
+    rooms(room).changeEvalState(user, category)
 
     Ok
   }

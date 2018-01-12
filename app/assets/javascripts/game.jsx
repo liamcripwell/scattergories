@@ -46,6 +46,8 @@ class Game extends React.Component {
                 ready: true,
                 answers: obj
             });
+        } else if (m.type === "evalstate") {
+            console.log(m.category + " for " + m.user + " has been set to " + m.state)
         }
     }
 
@@ -92,10 +94,7 @@ class Game extends React.Component {
                 "category": check
             } ),
             method: "post",
-            contentType: "application/json",
-            success: function (msg) {
-                console.log(msg);
-            }
+            contentType: "application/json"
         });
     }
 

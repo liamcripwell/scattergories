@@ -13,7 +13,18 @@ class EvalController @Inject() (implicit val mat: Materializer) extends Controll
     val room = req.body.\\("room").head.toString.replaceAll("\"", "")
 
     // respond to client
-    Ok(room)
+    Ok
+  }
+
+  def toggleAnswer() = Action(parse.json) { req =>
+
+    val room = req.body.\\("room").head.toString.replaceAll("\"", "")
+    val user = req.body.\\("user").head.toString.replaceAll("\"", "")
+    val category = req.body.\\("category").head.toString.replaceAll("\"", "")
+
+    rooms(room).evalState.toggleAnswer(user, category)
+
+    Ok
   }
 
 }

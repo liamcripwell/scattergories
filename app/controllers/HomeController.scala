@@ -17,8 +17,6 @@ import models.Room
 @Singleton
 class HomeController @Inject() (implicit val mat: Materializer) extends Controller {
 
-  var rooms = Map[String, Room]()
-
   def index = Action {
     Ok(views.html.index("Boilerplate Project"))
   }

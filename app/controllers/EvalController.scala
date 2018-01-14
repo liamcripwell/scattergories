@@ -12,7 +12,6 @@ class EvalController @Inject() (implicit val mat: Materializer) extends Controll
 
     val room = req.body.\\("room").head.toString.replaceAll("\"", "")
 
-    // respond to client
     Ok
   }
 
@@ -25,7 +24,6 @@ class EvalController @Inject() (implicit val mat: Materializer) extends Controll
     // change the room's evaluation state
     rooms(room).changeEvalState(user, category)
 
-    // send modified state back to the user
     Ok
   }
 

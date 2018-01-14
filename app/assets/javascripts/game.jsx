@@ -47,7 +47,30 @@ class Game extends React.Component {
                 answers: obj
             });
         } else if (m.type === "evalstate") {
-            console.log(m.state)
+            // get current component state
+            var currentState = this.state;
+
+            // append evalstate to component state
+            currentState.evalstate = m.state;
+            this.setState({
+                currentState
+            });
+            console.log(this.state.evalstate);
+
+            // update interface
+            this.updateEvalInterface();
+        }
+    }
+
+    updateEvalInterface() {
+        for (var member in this.state.evalstate.members) {
+            if (this.state.evalstate.members.hasOwnProperty(member)) {
+                if (this.state.evalstate.members[member].name === "liam") {
+                    for (var cat in this.state.evalstate.members[member].answers) {
+                        console.log("Liam ~ " + cat + ": " + this.state.evalstate.members[member].answers[cat]);
+                    }
+                }
+            }
         }
     }
 

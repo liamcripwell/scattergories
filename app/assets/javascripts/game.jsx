@@ -44,6 +44,7 @@ class Game extends React.Component {
                 inGame: true,
                 letter: this.state.letter,
                 ready: true,
+                allReady: false,
                 answers: obj
             });
         } else if (m.type === "evalstate") {
@@ -153,7 +154,13 @@ class Game extends React.Component {
                     <button id="button" onClick={this.userReady.bind(this)}>I'm ready!</button>
                 </div>
             );
-        } else if (this.state.ready) {
+        } else if (this.state.ready && !this.state.allReady) {
+            return (
+                <div id="answers">
+                    <p>Waiting for other players to finish...</p>
+                </div>
+            );
+        } else if (this.state.allReady) {
 
             // construct list of inputs for all answers
             var answersHtml = [];

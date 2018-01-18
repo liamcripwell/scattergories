@@ -95,10 +95,16 @@ class Room (id: String) {
   def ready(name: String): Unit = {
     users(name).ready = true
 
+    println(s"$name in room $id is ready...")
+
     gameChannel.push(Json.obj(
       "type" -> Json.toJsFieldJsValueWrapper("userready"),
       "user" -> Json.toJsFieldJsValueWrapper(name)
     ))
+
+    if (users.values.count(!_.ready) < 1) {
+      println(s"All users in room $id are ready...")
+    }
   }
 
 }

@@ -76,9 +76,9 @@ class Game extends React.Component {
     updateEvalInterface() {
         for (var member in this.state.evalstate.members) {
             if (this.state.evalstate.members.hasOwnProperty(member)) {
-                if (this.state.evalstate.members[member].name === "liam") {
+                if (this.state.evalstate.members[member].name === user) {
                     for (var cat in this.state.evalstate.members[member].answers) {
-                        console.log("Liam ~ " + cat + ": " + this.state.evalstate.members[member].answers[cat]);
+                        console.log(user + " ~ " + cat + ": " + this.state.evalstate.members[member].answers[cat]);
 
                         // update the answer checkboxes
                         $('#' + cat).prop('checked', this.state.evalstate.members[member].answers[cat]);

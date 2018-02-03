@@ -24,6 +24,16 @@ class Game extends React.Component {
                 inGame: true,
                 letter: m.letter
             });
+        } else if (m.type === "allready") {
+            // get current component state
+            var currentState = this.state;
+
+            // set allready state to true
+            currentState.allReady = true;
+            this.setState({
+                currentState
+            });
+
         } else if (m.type === "userready" && m.user === user) {
 
             var answerInputs = [];
@@ -69,6 +79,9 @@ class Game extends React.Component {
                 if (this.state.evalstate.members[member].name === "liam") {
                     for (var cat in this.state.evalstate.members[member].answers) {
                         console.log("Liam ~ " + cat + ": " + this.state.evalstate.members[member].answers[cat]);
+
+                        // update the answer checkboxes
+                        $('#' + cat).prop('checked', this.state.evalstate.members[member].answers[cat]);
                     }
                 }
             }

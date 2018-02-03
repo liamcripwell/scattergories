@@ -104,6 +104,12 @@ class Room (id: String) {
 
     if (users.values.count(!_.ready) < 1) {
       println(s"All users in room $id are ready...")
+
+      gameChannel.push(Json.obj(
+        "type" -> Json.toJsFieldJsValueWrapper("allready")
+      ))
+
+      // TODO: send state of all users' answers to all other users in room
     }
   }
 

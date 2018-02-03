@@ -30,6 +30,8 @@ class Game extends React.Component {
 
             // set allready state to true
             currentState.allReady = true;
+            currentState.members = m.members;
+            console.log(m.members);
             this.setState({
                 currentState
             });
@@ -177,19 +179,46 @@ class Game extends React.Component {
 
             // construct list of inputs for all answers
             var answersHtml = [];
-            for (var property in this.state.answers) {
-                if (this.state.answers.hasOwnProperty(property)) {
-                    answersHtml.push(
-                        <div className="results-input-group" key={property}>
-                            <span className="input-group-addon">
-                                    {property}: {this.state.answers[property]}
-                            </span>
-                            <span className="input-group-addon">
-                                <input type="checkbox" aria-label="..." id={property} onClick={this.modifyScore.bind(this, property)} />
-                            </span>
-                            <br/>
-                        </div>
-                    );
+            // for (var property in this.state.answers) {
+            //     if (this.state.answers.hasOwnProperty(property)) {
+            //         answersHtml.push(
+            //             <div className="results-input-group" key={property}>
+            //                 <span className="input-group-addon">
+            //                         {property}: {this.state.answers[property]}
+            //                 </span>
+            //                 <span className="input-group-addon">
+            //                     <input type="checkbox" aria-label="..." id={property} onClick={this.modifyScore.bind(this, property)} />
+            //                 </span>
+            //                 <br/>
+            //             </div>
+            //         );
+            //     }
+            // }
+
+            // testing bullshit
+            for (var member in this.state.members) {
+                if (this.state.members.hasOwnProperty(member)) {
+                    for (var property in this.state.answers) {
+                        if (this.state.answers.hasOwnProperty(property)) {
+                            answersHtml.push(
+                                <div className="panel panel-default">
+                                    <div className="panel-heading">{member}</div>
+                                    <div className="panel-body">
+                                        <div className="results-input-group" key={property + "-" + member}>
+                                            <span className="input-group-addon">
+                                                {property}: {this.state.answers[property]}
+                                            </span>
+                                            <span className="input-group-addon">
+                                                <input type="checkbox" aria-label="..." id={property}
+                                                       onClick={this.modifyScore.bind(this, property)}/>
+                                            </span>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        }
+                    }
                 }
             }
 
@@ -198,16 +227,12 @@ class Game extends React.Component {
                 <div>
                     <p>Current Letter: {this.state.letter}</p>
                     <br/>
+
                     <div className="row">
                         <div className="col-xs-3 col-md-2">
                         </div>
                         <div className="col-xs-5 col-md-3">
-                            <div className="panel panel-default">
-                                <div className="panel-heading">{user}</div>
-                                <div className="panel-body">
-                                    {answersHtml}
-                                </div>
-                            </div>
+                            {answersHtml}
                         </div>
                     </div>
                 </div>

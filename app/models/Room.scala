@@ -106,7 +106,8 @@ class Room (id: String) {
       println(s"All users in room $id are ready...")
 
       gameChannel.push(Json.obj(
-        "type" -> Json.toJsFieldJsValueWrapper("allready")
+        "type"    -> Json.toJsFieldJsValueWrapper("allready"),
+        "members" -> Json.toJsFieldJsValueWrapper(users.keys)
       ))
 
       // TODO: send state of all users' answers to all other users in room

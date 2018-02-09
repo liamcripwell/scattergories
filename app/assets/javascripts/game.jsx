@@ -195,30 +195,40 @@ class Game extends React.Component {
             //     }
             // }
 
-            // testing bullshit
+            // generate user answer checkbox panels
             for (var member in this.state.members) {
                 if (this.state.members.hasOwnProperty(member)) {
+                    console.log("member: " + this.state.members[member]);
+
+                    var checkBoxes = [];
+
+                    // generate a checkbox for each answer
                     for (var property in this.state.answers) {
                         if (this.state.answers.hasOwnProperty(property)) {
-                            answersHtml.push(
-                                <div className="panel panel-default">
-                                    <div className="panel-heading">{member}</div>
-                                    <div className="panel-body">
-                                        <div className="results-input-group" key={property + "-" + member}>
-                                            <span className="input-group-addon">
-                                                {property}: {this.state.answers[property]}
-                                            </span>
-                                            <span className="input-group-addon">
-                                                <input type="checkbox" aria-label="..." id={property}
-                                                       onClick={this.modifyScore.bind(this, property)}/>
-                                            </span>
-                                            <br/>
-                                        </div>
-                                    </div>
+                            checkBoxes.push(
+                                <div className="results-input-group" key={property + "-" + this.state.members[member]}>
+                                    <span className="input-group-addon">
+                                        {property}: {this.state.answers[property]}
+                                    </span>
+                                    <span className="input-group-addon">
+                                        <input type="checkbox" aria-label="..." id={property}
+                                               onClick={this.modifyScore.bind(this, property)}/>
+                                    </span>
+                                    <br/>
                                 </div>
                             );
                         }
                     }
+
+                    // push panel with imbedded answer checkboxes to list
+                    answersHtml.push(
+                        <div className="panel panel-default">
+                            <div className="panel-heading">{this.state.members[member]}</div>
+                            <div className="panel-body">
+                                {checkBoxes}
+                            </div>
+                        </div>
+                    );
                 }
             }
 
@@ -229,9 +239,9 @@ class Game extends React.Component {
                     <br/>
 
                     <div className="row">
-                        <div className="col-xs-3 col-md-2">
+                        <div className="col-xs-2 col-md-1">
                         </div>
-                        <div className="col-xs-5 col-md-3">
+                        <div className="col-xs-6 col-md-4">
                             {answersHtml}
                         </div>
                     </div>

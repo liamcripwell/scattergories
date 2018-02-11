@@ -78,14 +78,23 @@ class Game extends React.Component {
     updateEvalInterface() {
         for (var member in this.state.evalstate.members) {
             if (this.state.evalstate.members.hasOwnProperty(member)) {
-                if (this.state.evalstate.members[member].name === user) {
-                    for (var cat in this.state.evalstate.members[member].answers) {
-                        console.log(user + " ~ " + cat + ": " + this.state.evalstate.members[member].answers[cat]);
+                // if (this.state.evalstate.members[member].name === user) {
+                //     for (var cat in this.state.evalstate.members[member].answers) {
+                //         console.log(user + " ~ " + cat + ": " + this.state.evalstate.members[member].answers[cat]);
+                //
+                //         // update the answer checkboxes
+                //         $('#' + cat).prop('checked', this.state.evalstate.members[member].answers[cat]);
+                //     }
+                // }
 
-                        // update the answer checkboxes
-                        $('#' + cat).prop('checked', this.state.evalstate.members[member].answers[cat]);
-                    }
+                for (var cat in this.state.evalstate.members[member].answers) {
+                    console.log(this.state.members[member] + " ~ " + cat + ": " +
+                        this.state.evalstate.members[member].answers[cat]);
+
+                    // update the answer checkboxes
+                    $('#' + cat + '-' + this.state.members[member]).prop('checked', this.state.evalstate.members[member].answers[cat]);
                 }
+
             }
         }
     }
@@ -129,7 +138,7 @@ class Game extends React.Component {
             url: "/toggleanswer",
             data: JSON.stringify( {
                 "room": room,
-                "user": user,
+                "user": member,
                 "category": check
             } ),
             method: "post",

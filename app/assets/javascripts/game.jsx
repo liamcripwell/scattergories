@@ -118,7 +118,7 @@ class Game extends React.Component {
     }
 
     // handles modification of a user's score
-    modifyScore(check) {
+    modifyScore(check, member) {
         if($("#" + check).is(":checked")){
             console.log(check);
         } else {
@@ -179,21 +179,6 @@ class Game extends React.Component {
 
             // construct list of inputs for all answers
             var answersHtml = [];
-            // for (var property in this.state.answers) {
-            //     if (this.state.answers.hasOwnProperty(property)) {
-            //         answersHtml.push(
-            //             <div className="results-input-group" key={property}>
-            //                 <span className="input-group-addon">
-            //                         {property}: {this.state.answers[property]}
-            //                 </span>
-            //                 <span className="input-group-addon">
-            //                     <input type="checkbox" aria-label="..." id={property} onClick={this.modifyScore.bind(this, property)} />
-            //                 </span>
-            //                 <br/>
-            //             </div>
-            //         );
-            //     }
-            // }
 
             // generate user answer checkbox panels
             for (var member in this.state.members) {
@@ -206,13 +191,13 @@ class Game extends React.Component {
                     for (var property in this.state.answers) {
                         if (this.state.answers.hasOwnProperty(property)) {
                             checkBoxes.push(
-                                <div className="results-input-group" key={property + "-" + this.state.members[member]}>
+                                <div className="results-input-group" key={property + "-" + this.state.members[member] + "-group"}>
                                     <span className="input-group-addon">
                                         {property}: {this.state.answers[property]}
                                     </span>
                                     <span className="input-group-addon">
-                                        <input type="checkbox" aria-label="..." id={property}
-                                               onClick={this.modifyScore.bind(this, property)}/>
+                                        <input type="checkbox" aria-label="..." id={property + "-" + this.state.members[member]}
+                                               onClick={this.modifyScore.bind(this, property, this.state.members[member])}/>
                                     </span>
                                     <br/>
                                 </div>

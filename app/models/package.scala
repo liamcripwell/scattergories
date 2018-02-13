@@ -10,7 +10,8 @@ package object models {
       "name" -> Json.toJsFieldJsValueWrapper(member.name),
       "answers" -> Json.toJsFieldJsValueWrapper(
         Json.toJson(member.answerMatrix)
-      )
+      ),
+      "score" -> Json.toJsFieldJsValueWrapper(member.roundScore)
     )
   }
 

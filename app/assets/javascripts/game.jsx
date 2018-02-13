@@ -85,7 +85,12 @@ class Game extends React.Component {
                         this.state.evalstate.members[member].answers[cat]);
 
                     // update the answer checkboxes
-                    $('#' + cat + '-' + this.state.members[member]).prop('checked', this.state.evalstate.members[member].answers[cat]);
+                    $('#' + cat + '-' + this.state.members[member]).prop('checked',
+                        this.state.evalstate.members[member].answers[cat]);
+
+                    // update player round score
+                    $('#' + this.state.members[member] + '-score').text("Round Score: " +
+                        this.state.evalstate.members[member].score);
                 }
 
             }
@@ -214,6 +219,7 @@ class Game extends React.Component {
                         <div className="panel panel-default">
                             <div className="panel-heading">{this.state.members[member]}</div>
                             <div className="panel-body">
+                                <p id={this.state.members[member] + "-score"}>Round Score: 0</p>
                                 {checkBoxes}
                             </div>
                         </div>

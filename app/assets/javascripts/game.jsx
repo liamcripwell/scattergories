@@ -3,21 +3,22 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
 
-        // handle stream game events
+        // establish SSE source
         var gameFeed = new EventSource("/gamefeed/" + room);
 
+        // handle stream game events
         gameFeed.addEventListener("message", function(msg){
-
             let m = JSON.parse(msg.data);
             this.parseEvent(m);
-
         }.bind(this));
 
+        // initial state setting
         this.state = {
             inGame: false
         };
     }
 
+    // handle incoming SSEs
     parseEvent(m) {
         if (m.type === "start") {
             this.setState({
@@ -75,18 +76,10 @@ class Game extends React.Component {
         }
     }
 
+    // update the evaluation phase interface
     updateEvalInterface() {
         for (var member in this.state.evalstate.members) {
             if (this.state.evalstate.members.hasOwnProperty(member)) {
-                // if (this.state.evalstate.members[member].name === user) {
-                //     for (var cat in this.state.evalstate.members[member].answers) {
-                //         console.log(user + " ~ " + cat + ": " + this.state.evalstate.members[member].answers[cat]);
-                //
-                //         // update the answer checkboxes
-                //         $('#' + cat).prop('checked', this.state.evalstate.members[member].answers[cat]);
-                //     }
-                // }
-
                 for (var cat in this.state.evalstate.members[member].answers) {
                     console.log(this.state.members[member] + " ~ " + cat + ": " +
                         this.state.evalstate.members[member].answers[cat]);
@@ -99,6 +92,7 @@ class Game extends React.Component {
         }
     }
 
+    // lock the game room
     lockRoom() {
         $.ajax({
             url: "/lockroom",
@@ -111,6 +105,7 @@ class Game extends React.Component {
         });
     }
 
+    // alert server of user being ready
     userReady() {
         $.ajax({
             url: "/userready",

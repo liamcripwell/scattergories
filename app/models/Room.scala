@@ -111,13 +111,28 @@ class Room (id: String) {
 
       gameChannel.push(Json.obj(
         "type"    -> Json.toJsFieldJsValueWrapper("allready"),
-        "members" -> Json.toJsFieldJsValueWrapper(users.keys),
-        "scores"  -> Json.toJsFieldJsValueWrapper(users.map{
-          case (userName, user) => (userName, user.score)
-        })
+        "members" -> Json.toJsFieldJsValueWrapper(users.keys)
       ))
+    }
+  }
 
-      // TODO: send state of all users' answers to all other users in room
+  def finished(name: String): Unit = {
+    users(name).finished = true
+
+    println(s"$name in room $id is finished...")
+
+    gameChannel.push(Json.obj(
+      "type" -> Json.toJsFieldJsValueWrapper("finished"),
+      "user" -> Json.toJsFieldJsValueWrapper(name)
+    ))
+
+    // if all users are finished
+    if (users.values.count(!_.finished) < 1) {
+      println(s"All users in room $id are finished...")
+
+      gameChannel.push(Json.obj(
+        "type"    -> Json.toJsFieldJsValueWrapper("allfinished")
+      ))
     }
   }
 

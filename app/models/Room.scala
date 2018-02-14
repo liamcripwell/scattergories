@@ -79,7 +79,10 @@ class Room (id: String) {
 
     gameChannel.push(Json.obj(
       "type" -> Json.toJsFieldJsValueWrapper("start"),
-      "letter" -> Json.toJsFieldJsValueWrapper(letter)
+      "letter" -> Json.toJsFieldJsValueWrapper(letter),
+      "scores"  -> Json.toJsFieldJsValueWrapper(users.map{
+        case (userName, user) => (userName, user.score)
+      })
     ))
   }
 
@@ -102,12 +105,16 @@ class Room (id: String) {
       "user" -> Json.toJsFieldJsValueWrapper(name)
     ))
 
+    // if all users are ready
     if (users.values.count(!_.ready) < 1) {
       println(s"All users in room $id are ready...")
 
       gameChannel.push(Json.obj(
         "type"    -> Json.toJsFieldJsValueWrapper("allready"),
-        "members" -> Json.toJsFieldJsValueWrapper(users.keys)
+        "members" -> Json.toJsFieldJsValueWrapper(users.keys),
+        "scores"  -> Json.toJsFieldJsValueWrapper(users.map{
+          case (userName, user) => (userName, user.score)
+        })
       ))
 
       // TODO: send state of all users' answers to all other users in room

@@ -23,7 +23,8 @@ class Game extends React.Component {
         if (m.type === "start") {
             this.setState({
                 inGame: true,
-                letter: m.letter
+                letter: m.letter,
+                scores: m.scores
             });
         } else if (m.type === "allready") {
             // get current component state
@@ -31,7 +32,10 @@ class Game extends React.Component {
 
             // set allready state to true
             currentState.allReady = true;
+            currentState.scores = m.scores;
             currentState.members = m.members;
+
+            console.log(m.scores);
             console.log(m.members);
             this.setState({
                 currentState
@@ -152,8 +156,21 @@ class Game extends React.Component {
                 </div>
             );
         } else if (this.state.ready !== true) {
+            // generate html for player scores
+            var scoresHtml = [];
+            for (var player in this.state.scores) {
+                if (this.state.scores.hasOwnProperty(player)) {
+                    scoresHtml.push(
+                        <p>{player}: {this.state.scores[player]}</p>
+                    );
+                }
+            }
+
             return (
                 <div id="answers">
+                    <h4>Scores:</h4>
+                    {scoresHtml}
+                    <hr/>
                     <p>The current letter is... {this.state.letter}</p>
                     <br/>
                     <div className="input-group">

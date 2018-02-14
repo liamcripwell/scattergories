@@ -122,7 +122,7 @@ class Room (id: String) {
     println(s"$name in room $id is finished...")
 
     gameChannel.push(Json.obj(
-      "type" -> Json.toJsFieldJsValueWrapper("finished"),
+      "type" -> Json.toJsFieldJsValueWrapper("userfinished"),
       "user" -> Json.toJsFieldJsValueWrapper(name)
     ))
 

@@ -64,6 +64,10 @@ class Game extends React.Component {
                 allReady: false,
                 answers: obj
             });
+        } else if (m.type === "userfinished" && m.user === user) {
+
+            console.log("You are finished...");
+
         } else if (m.type === "evalstate") {
             // get current component state
             var currentState = this.state;
@@ -118,6 +122,22 @@ class Game extends React.Component {
     userReady() {
         $.ajax({
             url: "/userready",
+            data: JSON.stringify( {
+                "room": room,
+                "user": user
+            } ),
+            method: "post",
+            contentType: "application/json",
+            success: function (msg) {
+                console.log(msg);
+            }
+        });
+    }
+
+    // alert server of user being ready
+    userFinished() {
+        $.ajax({
+            url: "/userfinished",
             data: JSON.stringify( {
                 "room": room,
                 "user": user
@@ -251,6 +271,8 @@ class Game extends React.Component {
                             {answersHtml}
                         </div>
                     </div>
+
+                    <button id="finished-button" onClick={this.userFinished.bind(this)}>Finished!</button>
                 </div>
             )
         }

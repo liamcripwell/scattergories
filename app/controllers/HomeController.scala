@@ -133,6 +133,15 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     Ok
   }
 
+  def userFinished() = Action(parse.json) { req =>
+    val room = req.body.\\("room").head.toString.replaceAll("\"", "")
+    val user = req.body.\\("user").head.toString.replaceAll("\"", "")
+
+    rooms(room).finished(user)
+
+    Ok
+  }
+
   def updateScore() = Action(parse.json) { req =>
     val room   = req.body.\\("room").head.toString.replaceAll("\"", "")
     val user   = req.body.\\("user").head.toString.replaceAll("\"", "")

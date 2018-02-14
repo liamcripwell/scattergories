@@ -13,6 +13,7 @@ POST    /newuser                    controllers.HomeController.newUser
 POST    /removeuser                 controllers.HomeController.removeUser
 POST    /lockroom                   controllers.HomeController.lockRoom
 POST    /userready                  controllers.HomeController.userReady
+POST    /updatescore                controllers.HomeController.updateScore
 
 POST    /toggleanswer               controllers.EvalController.toggleAnswer
 

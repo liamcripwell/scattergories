@@ -114,4 +114,15 @@ class Room (id: String) {
     }
   }
 
+  /**
+    * Updates a user's score by a specified amount
+    * @param name the user's name
+    * @param scoreIncrease the amount to add to existing score
+    */
+  def updateScore(name: String, scoreIncrease: Int): Unit = {
+    users(name).score += scoreIncrease
+
+    println(s"$name's score has been updated to: ${users(name).score}")
+  }
+
 }

@@ -128,12 +128,6 @@ class Game extends React.Component {
 
     // handles modification of a user's score
     modifyScore(check, member) {
-        if($("#" + check).is(":checked")){
-            console.log(check);
-        } else {
-            console.log("poo");
-        }
-
         $.ajax({
             url: "/toggleanswer",
             data: JSON.stringify( {

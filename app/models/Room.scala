@@ -140,6 +140,11 @@ class Room (id: String) {
         user.finished = false
       }
 
+      // update scores
+      users.foreach { case (userName, user) =>
+        updateScore(userName, evalState.memberStates(userName).roundScore)
+      }
+
       letter = setLetter()
 
       startGame()

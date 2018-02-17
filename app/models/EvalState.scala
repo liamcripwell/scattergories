@@ -22,7 +22,7 @@ class EvalState (val room: String, val users: Map[String, User]) {
         if (ans) 1 else 0
       }.sum
 
-      println(s"$name's score : ${state.roundScore}")
+      println(s"$name's round score : ${state.roundScore}")
     }
   }
 

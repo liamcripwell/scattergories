@@ -68,6 +68,24 @@ class Game extends React.Component {
 
             console.log("You are finished...");
 
+            // get current component state
+            var currentState = this.state;
+
+            currentState.finished = true;
+            this.setState({
+                currentState
+            });
+
+        } else if (m.type === "allfinished") {
+            // get current component state
+            var currentState = this.state;
+
+            currentState.ready = false;
+            currentState.allReady = false;
+            currentState.finished = false;
+            this.setState({
+                currentState
+            });
         } else if (m.type === "evalstate") {
             // get current component state
             var currentState = this.state;
@@ -258,6 +276,17 @@ class Game extends React.Component {
                 }
             }
 
+            var finishedComponent = [];
+            if (this.state.finished) {
+                finishedComponent.push(
+                    <p>Awaiting other players to confirm...</p>
+                );
+            } else {
+                finishedComponent.push(
+                    <button id="finished-button" onClick={this.userFinished.bind(this)}>Finished!</button>
+                );
+            }
+
             // update interface
             return (
                 <div>
@@ -272,7 +301,7 @@ class Game extends React.Component {
                         </div>
                     </div>
 
-                    <button id="finished-button" onClick={this.userFinished.bind(this)}>Finished!</button>
+                    {finishedComponent}
                 </div>
             )
         }

@@ -21,8 +21,12 @@ class Room (id: String) {
   var locked = false
 
   val r = scala.util.Random
-  var letter = r.alphanumeric.filter(_.isLetter).head.toUpper.toString
+  var letter = setLetter()
   var evalState = new EvalState(id, users)
+
+  def setLetter() = {
+    r.alphanumeric.filter(_.isLetter).head.toUpper.toString
+  }
 
   /**
     * Adds the user to users and pushes event into event channel
@@ -130,6 +134,17 @@ class Room (id: String) {
     if (users.values.count(!_.finished) < 1) {
       println(s"All users in room $id are finished...")
 
+      // reset players to start new round
+      users.values.foreach { user =>
+        user.ready = false
+        user.finished = false
+      }
+
+      letter = setLetter()
+
+      startGame()
+
+      // send SSE
       gameChannel.push(Json.obj(
         "type"    -> Json.toJsFieldJsValueWrapper("allfinished")
       ))

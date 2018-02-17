@@ -4,7 +4,7 @@ import java.util.Locale.Category
 
 import controllers.rooms
 import play.api.libs.iteratee.Concurrent
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
 
 /**
   * A room that a set of users will play games within
@@ -81,6 +81,13 @@ class Room (id: String) {
     locked = true
     evalState = new EvalState(id, users)
 
+    // eval state
+    gameChannel.push(Json.obj(
+      "type" -> Json.toJsFieldJsValueWrapper("evalstate"),
+      "state" -> Json.toJsFieldJsValueWrapper(Json.toJson(evalState))
+    ))
+
+    // game details
     gameChannel.push(Json.obj(
       "type" -> Json.toJsFieldJsValueWrapper("start"),
       "letter" -> Json.toJsFieldJsValueWrapper(letter),
@@ -115,7 +122,10 @@ class Room (id: String) {
 
       gameChannel.push(Json.obj(
         "type"    -> Json.toJsFieldJsValueWrapper("allready"),
-        "members" -> Json.toJsFieldJsValueWrapper(users.keys)
+        "members" -> Json.toJsFieldJsValueWrapper(users.keys),
+        "playerAnswers" -> Json.toJsFieldJsValueWrapper(users.map { case (_, value) =>
+          Json.toJson(value.answers)
+        })
       ))
     }
   }
@@ -165,6 +175,12 @@ class Room (id: String) {
     users(name).score += scoreIncrease
 
     println(s"$name's score has been updated to: ${users(name).score}")
+  }
+
+  def updateAnswers(name: String, answers: Map[String, JsValue]): Unit = {
+    users(name).answers = answers.map { case (key, value) =>
+      (key, value.toString)
+    }
   }
 
 }

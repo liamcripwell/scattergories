@@ -34,9 +34,10 @@ class Game extends React.Component {
             currentState.allReady = true;
             currentState.scores = m.scores;
             currentState.members = m.members;
+            currentState.playerAnswers = m.playerAnswers;
 
-            console.log(m.scores);
-            console.log(m.members);
+            console.log(currentState.playerAnswers);
+
             this.setState({
                 currentState
             });
@@ -45,16 +46,18 @@ class Game extends React.Component {
 
             var answerInputs = [];
             var obj = {};
+            var tups = [];
 
             $("#answers :input").each(function() {
                 if ($(this).attr("type") === "text"){
                     var id = $(this).attr("id");
                     obj[id] = $(this).val().toString();
-                    answerInputs.push(obj);
+                    tups.push((id.toString() + ">>" +  $(this).val().toString()));
                 }
             });
 
-            console.log(answerInputs.length);
+            answerInputs.push(obj);
+
             answerInputs.forEach(function(x){console.log(x)})
 
             this.setState({
@@ -107,15 +110,15 @@ class Game extends React.Component {
         for (var member in this.state.evalstate.members) {
             if (this.state.evalstate.members.hasOwnProperty(member)) {
                 for (var cat in this.state.evalstate.members[member].answers) {
-                    console.log(this.state.members[member] + " ~ " + cat + ": " +
+                    console.log(this.state.evalstate.members[member].name + " ~ " + cat + ": " +
                         this.state.evalstate.members[member].answers[cat]);
 
                     // update the answer checkboxes
-                    $('#' + cat + '-' + this.state.members[member]).prop('checked',
+                    $('#' + cat + '-' + this.state.evalstate.members[member].name).prop('checked',
                         this.state.evalstate.members[member].answers[cat]);
 
                     // update player round score
-                    $('#' + this.state.members[member] + '-score').text("Round Score: " +
+                    $('#' + this.state.evalstate.members[member].name + '-score').text("Round Score: " +
                         this.state.evalstate.members[member].score);
                 }
 
@@ -138,18 +141,42 @@ class Game extends React.Component {
 
     // alert server of user being ready
     userReady() {
+        var obj = {};
+
+        $("#answers :input").each(function() {
+            if ($(this).attr("type") === "text"){
+                var id = $(this).attr("id");
+                obj[id] = $(this).val().toString();
+            }
+        });
+
         $.ajax({
-            url: "/userready",
+            url: "/answers",
             data: JSON.stringify( {
-                "room": room,
-                "user": user
+                "answers": obj,
+                "user": user,
+                "room": room
             } ),
             method: "post",
             contentType: "application/json",
             success: function (msg) {
                 console.log(msg);
+
+                $.ajax({
+                    url: "/userready",
+                    data: JSON.stringify( {
+                        "room": room,
+                        "user": user
+                    } ),
+                    method: "post",
+                    contentType: "application/json",
+                    success: function (msg) {
+                        console.log(msg);
+                    }
+                });
             }
         });
+
     }
 
     // alert server of user being ready
@@ -239,23 +266,24 @@ class Game extends React.Component {
             var answersHtml = [];
 
             // generate user answer checkbox panels
-            for (var member in this.state.members) {
-                if (this.state.members.hasOwnProperty(member)) {
-                    console.log("member: " + this.state.members[member]);
+            for (var member in this.state.evalstate.members) {
+                if (this.state.evalstate.members.hasOwnProperty(member)) {
+                    console.log(member);
+                    console.log("member: " + this.state.evalstate.members[member].name);
 
                     var checkBoxes = [];
 
                     // generate a checkbox for each answer
-                    for (var property in this.state.answers) {
-                        if (this.state.answers.hasOwnProperty(property)) {
+                    for (var property in this.state.evalstate.members[member].answers) {
+                        if (this.state.evalstate.members[member].answers.hasOwnProperty(property)) {
                             checkBoxes.push(
-                                <div className="results-input-group" key={property + "-" + this.state.members[member] + "-group"}>
+                                <div className="results-input-group" key={property + "-" + this.state.evalstate.members[member].name + "-group"}>
                                     <span className="input-group-addon">
-                                        {property}: {this.state.answers[property]}
+                                        {property}: {this.state.playerAnswers[member][property]}
                                     </span>
                                     <span className="input-group-addon">
-                                        <input type="checkbox" aria-label="..." id={property + "-" + this.state.members[member]}
-                                               onClick={this.modifyScore.bind(this, property, this.state.members[member])}/>
+                                        <input type="checkbox" aria-label="..." id={property + "-" + this.state.evalstate.members[member].name}
+                                               onClick={this.modifyScore.bind(this, property, this.state.evalstate.members[member].name)}/>
                                     </span>
                                     <br/>
                                 </div>
@@ -266,9 +294,9 @@ class Game extends React.Component {
                     // push panel with imbedded answer checkboxes to list
                     answersHtml.push(
                         <div className="panel panel-default">
-                            <div className="panel-heading">{this.state.members[member]}</div>
+                            <div className="panel-heading">{this.state.evalstate.members[member].name}</div>
                             <div className="panel-body">
-                                <p id={this.state.members[member] + "-score"}>Round Score: 0</p>
+                                <p id={this.state.evalstate.members[member].name + "-score"}>Round Score: 0</p>
                                 {checkBoxes}
                             </div>
                         </div>

@@ -14,6 +14,7 @@ POST    /removeuser                 controllers.HomeController.removeUser
 POST    /lockroom                   controllers.HomeController.lockRoom
 POST    /userready                  controllers.HomeController.userReady
 POST    /userfinished               controllers.HomeController.userFinished
+POST    /answers                    controllers.HomeController.receiveAnswers
 
 
 POST    /updatescore                controllers.HomeController.updateScore

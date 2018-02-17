@@ -6,6 +6,7 @@ import akka.stream.Materializer
 import play.api.libs.EventSource
 import play.api.mvc._
 import models.Room
+import play.api.libs.json.{JsObject, JsValue}
 
 // TODO
 //   - fragment this class into several different controllers
@@ -148,6 +149,16 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
     val amount = req.body.\\("amount").head.toString.replaceAll("\"", "").toInt
 
     rooms(room).updateScore(user, amount)
+
+    Ok
+  }
+
+  def receiveAnswers() = Action(parse.json) { req =>
+    val room   = req.body.\\("room").head.toString.replaceAll("\"", "")
+    val user   = req.body.\\("user").head.toString.replaceAll("\"", "")
+    val answers: Map[String, JsValue] = req.body.\\("answers").head.as[JsObject].value.toMap
+
+    rooms(room).updateAnswers(user, answers)
 
     Ok
   }

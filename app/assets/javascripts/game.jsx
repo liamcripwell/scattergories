@@ -32,7 +32,6 @@ class Game extends React.Component {
 
             // set allready state to true
             currentState.allReady = true;
-            currentState.scores = m.scores;
             currentState.members = m.members;
             currentState.playerAnswers = m.playerAnswers;
 
@@ -63,6 +62,7 @@ class Game extends React.Component {
             this.setState({
                 inGame: true,
                 letter: this.state.letter,
+                scores: this.state.scores,
                 ready: true,
                 allReady: false,
                 answers: obj
@@ -244,15 +244,17 @@ class Game extends React.Component {
                         <span className="input-group-addon" id="basic-addon1">Fictional Character</span>
                         <input id="character" type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon1" />
                     </div>
+                    <br/>
                     <div className="input-group">
                         <span className="input-group-addon" id="basic-addon2">Location</span>
                         <input id="location" type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon2" />
                     </div>
+                    <br/>
                     <div className="input-group">
                         <span className="input-group-addon" id="basic-addon3">Animal</span>
                         <input id="animal" type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon3" />
                     </div>
-
+                    <br/>
                     <button id="button" onClick={this.userReady.bind(this)}>I'm ready!</button>
                 </div>
             );
@@ -306,6 +308,7 @@ class Game extends React.Component {
                 }
             }
 
+            // determine what to show depending on whether user has accepted eval state
             var finishedComponent = [];
             if (this.state.finished) {
                 finishedComponent.push(
@@ -317,9 +320,24 @@ class Game extends React.Component {
                 );
             }
 
+            console.log("the scores are: " + this.state.scores);
+
+            // generate html for player scores
+            var scoresHtml = [];
+            for (var player in this.state.scores) {
+                if (this.state.scores.hasOwnProperty(player)) {
+                    scoresHtml.push(
+                        <p>{player}: {this.state.scores[player]}</p>
+                    );
+                }
+            }
+
             // update interface
             return (
                 <div>
+                    <h4>Scores:</h4>
+                    {scoresHtml}
+                    <hr/>
                     <p>Current Letter: {this.state.letter}</p>
                     <br/>
 

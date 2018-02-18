@@ -6,11 +6,13 @@
     <h1>@title</h1>
     <hr>
 
-    <p>Share this link with others:
-        <a>
-            <script>document.write(window.location.href);</script>
-        </a>
-    </p>
+    Share this link with others:
+
+    <input id="share" type="text" value="" class="field left" size="35">
+    <script>
+            document.getElementById('share').value = window.location.href;
+    </script>
+
     <hr>
 
     @* main content panel *@

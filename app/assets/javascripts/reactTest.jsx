@@ -1,16 +1,6 @@
 class MyComponent extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            score: 0
-        };
-    }
-
-    increment() {
-        this.setState({
-            score: this.state.score+1
-        });
     }
 
     newRoom() {
@@ -29,8 +19,6 @@ class MyComponent extends React.Component {
     render() {
         return (
         <div>
-            <h3>Current score: {this.state.score}.</h3>
-            <button onClick={this.increment.bind(this)}>Increment</button>
             <button onClick={this.newRoom}>Create new room</button>
         </div>
         );

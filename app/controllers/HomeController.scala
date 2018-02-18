@@ -19,7 +19,7 @@ import play.api.libs.json.{JsObject, JsValue}
 class HomeController @Inject() (implicit val mat: Materializer) extends Controller {
 
   def index = Action {
-    Ok(views.html.index("Boilerplate Project"))
+    Ok(views.html.index("Scattergories"))
   }
 
   /**
@@ -33,7 +33,7 @@ class HomeController @Inject() (implicit val mat: Materializer) extends Controll
         if (rooms(room).locked) {
           views.html.noroom("This room is locked")
         } else {
-          views.html.room(room, room)
+          views.html.room("Scattergories", room)
         }
       } else {
         views.html.noroom("No such room")

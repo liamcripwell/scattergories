@@ -1,4 +1,4 @@
-class MyComponent extends React.Component {
+class HomeInterface extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -26,6 +26,6 @@ class MyComponent extends React.Component {
 }
 
 React.render(
-    <MyComponent />,
+    <HomeInterface />,
     document.getElementById('content')
 );

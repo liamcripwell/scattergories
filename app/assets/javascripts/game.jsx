@@ -95,6 +95,8 @@ class Game extends React.Component {
 
             // append evalstate to component state
             currentState.evalstate = m.state;
+            currentState.finished = false;
+
             this.setState({
                 currentState
             });

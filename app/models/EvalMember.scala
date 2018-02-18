@@ -4,10 +4,12 @@ class EvalMember (val name: String) {
 
   var roundScore = 0
   var agreement = false
-  var answerMatrix = Map(
+  var answerMatrix: Map[String, Boolean] = Map(
     "character" -> false,
+    "person"    -> false,
     "location"  -> false,
-    "animal"    -> false
+    "animal"    -> false,
+    "music"     -> false
   )
 
   /**

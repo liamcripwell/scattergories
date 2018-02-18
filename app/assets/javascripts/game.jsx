@@ -241,6 +241,11 @@ class Game extends React.Component {
                     </div>
                     <br/>
                     <div className="input-group">
+                        <span className="input-group-addon" id="basic-addon4">Notable Person</span>
+                        <input id="person" type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon4" />
+                    </div>
+                    <br/>
+                    <div className="input-group">
                         <span className="input-group-addon" id="basic-addon2">Location</span>
                         <input id="location" type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon2" />
                     </div>
@@ -248,6 +253,11 @@ class Game extends React.Component {
                     <div className="input-group">
                         <span className="input-group-addon" id="basic-addon3">Animal</span>
                         <input id="animal" type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon3" />
+                    </div>
+                    <br/>
+                    <div className="input-group">
+                        <span className="input-group-addon" id="basic-addon5">Music Genre</span>
+                        <input id="music" type="text" className="form-control" placeholder="Enter here..." aria-describedby="basic-addon5" />
                     </div>
                     <br/>
                     <button id="button" onClick={this.userReady.bind(this)}>I'm ready!</button>
@@ -289,11 +299,13 @@ class Game extends React.Component {
 
                     // push panel with imbedded answer checkboxes to list
                     answersHtml.push(
-                        <div className="panel panel-default">
-                            <div className="panel-heading">{this.state.evalstate.members[member].name}</div>
-                            <div className="panel-body">
-                                <p id={this.state.evalstate.members[member].name + "-score"}>Round Score: 0</p>
-                                {checkBoxes}
+                        <div className="col-md-4">
+                            <div className="panel panel-default">
+                                <div className="panel-heading">{this.state.evalstate.members[member].name}</div>
+                                <div className="panel-body">
+                                    <p id={this.state.evalstate.members[member].name + "-score"}>Round Score: 0</p>
+                                    {checkBoxes}
+                                </div>
                             </div>
                         </div>
                     );
@@ -332,11 +344,7 @@ class Game extends React.Component {
                     <br/>
 
                     <div className="row">
-                        <div className="col-xs-2 col-md-1">
-                        </div>
-                        <div className="col-xs-6 col-md-4">
-                            {answersHtml}
-                        </div>
+                        {answersHtml}
                     </div>
 
                     {finishedComponent}

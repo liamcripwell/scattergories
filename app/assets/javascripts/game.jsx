@@ -72,6 +72,7 @@ class Game extends React.Component {
             // get current component state
             var currentState = this.state;
 
+            currentState.inGame = false;
             currentState.ready = false;
             currentState.allReady = false;
             currentState.finished = false;
@@ -188,12 +189,34 @@ class Game extends React.Component {
 
     render() {
         if (!this.state.inGame) {
-            return (
-                <div>
-                    <p>Wait for all players to join, then click button to begin...</p>
-                    <button onClick={this.lockRoom.bind(this)}>Start Game</button>
-                </div>
-            );
+            if (this.state.hasOwnProperty("scores")) {
+                // generate html for player scores if rounds have already been played
+                var scoresHtml = [];
+                for (var player in this.state.scores) {
+                    if (this.state.scores.hasOwnProperty(player)) {
+                        scoresHtml.push(
+                            <p>{player}: {this.state.scores[player]}</p>
+                        );
+                    }
+                }
+
+                return (
+                    <div>
+                        <h4>Scores:</h4>
+                        {scoresHtml}
+                        <hr/>
+                        <p>Click button to begin next round...</p>
+                        <button onClick={this.lockRoom.bind(this)}>Start Game</button>
+                    </div>
+                );
+            } else {
+                return (
+                    <div>
+                        <p>Wait for all players to join, then click button to begin...</p>
+                        <button onClick={this.lockRoom.bind(this)}>Start Game</button>
+                    </div>
+                );
+            }
         } else if (this.state.ready !== true) {
             // generate html for player scores
             var scoresHtml = [];
